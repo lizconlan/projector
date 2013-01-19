@@ -1,0 +1,13 @@
+%div.project
+  %h2= @project.name
+  %h3 About
+  %div.description
+    =@markdown.render(@project.readme)
+    
+  - if @project.repositories and !@project.repositories.empty?
+    %h3 Repositories
+    - @project.repositories.each do |repo|
+      %h4.name
+      %a{:href => repo.url, :class => "repository"} repo.url
+      - if repo.notes
+        %div.repository_notes= @markdown.render(repo.notes)
