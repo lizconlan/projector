@@ -2,4 +2,4 @@
 %ul
   - @projects.each do |project|
     %li.project
-      %a{:href => "/project/#{project.id}"}= project.name
+      %a{:href => "/#{project.slug}"}= project.name
