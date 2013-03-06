@@ -1,18 +1,18 @@
-%h2 Edit
+%h2= request.path_info.split("/")[-1] == "add" ? "New Project" : "Edit"
 
 %form{:method => "post"}
   %label{:for => "name"} Name
-  %input{:type => "text", :id => "name", :name => "name", :value => @project.name, :size => "40"}
+  %input{:type => "text", :id => "name", :name => "name", :value => @project.name ? @project.name : "", :size => "40"}
   
   %br
   
   %label{:for => "date"} Date
-  %input{:type => "text", :id => "date", :name => "date", :value => @project.date.to_s.split(" ")[0], :size => 12}
+  %input{:type => "text", :id => "date", :name => "date", :value => @project.date ? @project.date.to_s.split(" ")[0] : "", :size => 12}
   
   %br
   
   %label{:for => "slug"} Slug
-  %input{:type => "text", :id => "slug", :name => "slug", :value => @project.slug, :size => "40"}
+  %input{:type => "text", :id => "slug", :name => "slug", :value => @project.slug ? @project.slug : "", :size => "40"}
   
   %br
   

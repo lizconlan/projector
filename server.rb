@@ -18,12 +18,35 @@ get "/" do
   haml(:index)
 end
 
+get "/add/?" do
+  @project = Project.new
+  haml(:edit)
+end
+
+post "/add/?" do
+  # needs to do error checking and jump back to/redisplay the error form if there's a problem
+  # i.e. - slug not unique, invalid date
+  
+  @project = Project.new
+  @project.name = params[:name]
+  @project.slug = params[:slug]
+  #needs to check that the slug is unique
+  @project.date = params[:date]
+  @project.readme = params[:readme]
+  @project.save
+  
+  redirect("/#{@project.slug}")
+end
+
 get "/:slug/edit/?" do
   @project = Project.find_by_slug(params[:slug])
   haml(:edit)
 end
 
 post "/:slug/edit/?" do
+  # needs to do error checking and jump back to/redisplay the error form if there's a problem
+  # i.e. - slug not unique, invalid date
+  
   @project = Project.find_by_slug(params[:slug])
   @project.name = params[:name]
   @project.slug = params[:slug]
@@ -40,10 +63,4 @@ end
 get "/:slug/?" do
   @project = Project.find_by_slug(params[:slug])
   haml(:show)
-end
-
-get "/add/?" do
-end
-
-post "/add/?" do
 end
