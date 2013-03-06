@@ -1,13 +1,23 @@
 %div.project
   %h2= @project.name
-  %h3 About
+  
+  %span.project_date
+    ="c. #{@project.date.strftime("%B %Y")}"
+  
+  %h3 Overview
   %div.description
     =@markdown.render(@project.readme)
-    
+  
+  - unless @project.live_sites.empty?
+    %h3 Live links
+    - @project.live_sites.each do |site|
+      =@markdown.render(site.notes)
+      %a{:href => site.url}= site.url
+  
   - if @project.repositories and !@project.repositories.empty?
     %h3 Repositories
     - @project.repositories.each do |repo|
-      %h4.name
-      %a{:href => repo.url, :class => "repository"} repo.url
+      %h4.name=repo.name
+      %a{:href => repo.url, :class => "repository"}= repo.url
       - if repo.notes
         %div.repository_notes= @markdown.render(repo.notes)
