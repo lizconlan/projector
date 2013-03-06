@@ -20,5 +20,5 @@ create table `live_sites` (
   `url` varchar(256) NOT NULL,
   `notes` text NULL,
   `project_id` int(11) NOT NULL,
-  PRIMARY KEY ('id')
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
