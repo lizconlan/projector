@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'active_record'
 require 'haml'
+require 'redcarpet'
 
 before do
   dbconfig = YAML::load(File.open 'config/database.yml')
@@ -13,21 +14,26 @@ require './models/repository'
 require './models/live_site'
 
 get "/" do
-  @projects = Projects.all #ok, should paginate here but this will do for now
+  @projects = Project.all #ok, should paginate here but this will do for now
   haml(:index)
 end
 
 get "/project/:id" do
-  @project = Project.find(id)
+  @project = Project.find(params[:id])
   haml(:show)
 end
 
 get "/project/:id/edit" do
 end
 
+post "/project/:id/edit" do
+end
+
 get "/project/:id/delete" do
 end
 
 get "/create" do
-  
+end
+
+post "/create" do
 end
