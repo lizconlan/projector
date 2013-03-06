@@ -23,6 +23,17 @@ get "/:slug/edit/?" do
   haml(:edit)
 end
 
+post "/:slug/edit/?" do
+  @project = Project.find_by_slug(params[:slug])
+  @project.name = params[:name]
+  @project.slug = params[:slug]
+  @project.date = params[:date]
+  @project.readme = params[:readme]
+  @project.save
+  
+  redirect("/#{@project.slug}")
+end
+
 get "/:slug/delete/?" do
 end
 
