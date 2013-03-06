@@ -18,22 +18,21 @@ get "/" do
   haml(:index)
 end
 
-get "/project/:id" do
-  @project = Project.find(params[:id])
+get "/:slug/edit/?" do
+  @project = Project.find_by_slug(params[:slug])
+  haml(:edit)
+end
+
+get "/:slug/delete/?" do
+end
+
+get "/:slug/?" do
+  @project = Project.find_by_slug(params[:slug])
   haml(:show)
 end
 
-get "/project/:id/edit" do
+get "/add/?" do
 end
 
-post "/project/:id/edit" do
-end
-
-get "/project/:id/delete" do
-end
-
-get "/create" do
-end
-
-post "/create" do
+post "/add/?" do
 end

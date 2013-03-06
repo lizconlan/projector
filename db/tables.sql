@@ -3,6 +3,7 @@ create table `projects` (
   `name` varchar(256) NOT NULL,
   `readme` text NOT NULL,
   `date` datetime NULL,
+  `slug` varchar(128) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
