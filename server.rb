@@ -14,7 +14,7 @@ require './models/repository'
 require './models/live_site'
 
 get "/" do
-  @projects = Project.all #ok, should paginate here but this will do for now
+  @projects = Project.find(:all, :order => "date desc") #ok, should paginate here but this will do for now
   haml(:index)
 end
 
@@ -30,7 +30,6 @@ post "/add/?" do
   @project = Project.new
   @project.name = params[:name]
   @project.slug = params[:slug]
-  #needs to check that the slug is unique
   @project.date = params[:date]
   @project.readme = params[:readme]
   @project.save
