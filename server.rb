@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/flash'
 require 'active_record'
 require 'haml'
+require 'date'
 require 'redcarpet'
 
 enable :sessions
@@ -41,7 +42,6 @@ post "/login" do
   if user && user.authenticate(params[:password])
     session[:user_id] = user.id
     flash.next[:success] =  "You're logged in. Welcome back"
-    flash.keep
     redirect '/'
   else
     flash.now[:alert] = "Login didn't work. Try again?"
@@ -63,38 +63,63 @@ end
 
 post "/add/?" do
   authenticate_user!
-  # needs to do error checking and jump back to/redisplay the error form if there's a problem
-  # i.e. - slug not unique, invalid date
   
   @project = Project.new
   @project.name = params[:name]
   @project.slug = params[:slug]
   @project.date = params[:date]
   @project.readme = params[:readme]
-  @project.save
   
-  redirect("/#{@project.slug}")
+  if Project.find_by_slug(params[:slug])
+    flash.now[:alert] = "Slug aleady in use, needs to be unique"
+    @error_field = "slug"
+    haml(:edit)
+  else
+    begin
+      Date.parse(@project.date)
+    rescue
+      flash.now[:alert] = "Invalid date, please correct it before continuing"
+      @error_field = "date"
+      haml(:edit)
+    else
+      @project.save
+      redirect("/#{@project.slug}")
+    end
+  end
 end
 
 get "/:slug/edit/?" do
   authenticate_user!
   @project = Project.find_by_slug(params[:slug])
+  @project.readme.gsub!("\n", "")
   haml(:edit)
 end
 
-post "/:slug/edit/?" do
+post "/:original_slug/edit/?" do
   authenticate_user!
-  # needs to do error checking and jump back to/redisplay the error form if there's a problem
-  # i.e. - slug not unique, invalid date
   
-  @project = Project.find_by_slug(params[:slug])
+  @project = Project.find_by_slug(params[:original_slug])
   @project.name = params[:name]
   @project.slug = params[:slug]
   @project.date = params[:date]
   @project.readme = params[:readme]
-  @project.save
   
-  redirect("/#{@project.slug}")
+  if params[:slug] != params[:original_slug] and Project.find_by_slug(params[:slug])
+    flash.now[:alert] = "Slug aleady in use, needs to be unique"
+    @error_field = "slug"
+    haml(:edit)
+  else
+    begin
+      Date.parse(@project.date.to_s.split[0])
+    rescue
+      flash.now[:alert] = "Invalid date, please correct it before continuing"
+      @error_field = "date"
+      haml(:edit)
+    else
+      @project.save
+      redirect("/#{@project.slug}")
+    end
+  end
 end
 
 get "/:slug/delete/?" do
