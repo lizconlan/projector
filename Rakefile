@@ -16,6 +16,7 @@ namespace :db do
     ActiveRecord::Base.logger = Logger.new(STDOUT)
     ActiveRecord::Migration.verbose = true
     ActiveRecord::Migrator.migrate("db/migrate")
+    Rake::Task["db:schema:dump"].invoke
   end
   
   namespace :migrate do
