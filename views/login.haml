@@ -1,0 +1,16 @@
+%h2 Login
+
+=styled_flash
+
+%form{:method => "post"}
+  %label{:for => "login"} Login
+  %input{:type=>'text', :size=>20, :name=>'login', :id => 'login'}
+  
+  %br
+  
+  %label{:for => "password"} Password:
+  %input{:type=>'password', :size=>20, :name=>'password', :id => 'password'}
+  
+  %br
+  
+  %input{:type=>'submit', :value=>'Login'}

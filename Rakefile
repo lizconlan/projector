@@ -3,12 +3,12 @@ Bundler.setup
 
 require 'active_record'
 require 'logger'
+require './models/user'
 
 task :environment do
   dbconfig = YAML::load(File.open 'config/database.yml')
   ActiveRecord::Base.establish_connection(dbconfig)
 end
-
 
 namespace :db do
   desc "Migrate the database"
@@ -46,6 +46,20 @@ namespace :db do
       File.open(ENV['SCHEMA'] || "db/schema.rb", "w") do |file|
         ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
       end
+    end
+  end
+end
+
+namespace :projector do
+  desc "Create initial admin user"
+  task :create_admin_user => :environment do
+    password = ENV['password']
+    login    = ENV['login']
+    unless password && login
+      puts 'must supply password and login for the new admin user'
+      puts 'USAGE: rake projector:create_admin_user password=pass login=login_name'
+    else
+      User.create_admin_user(password, login)
     end
   end
 end
