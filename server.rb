@@ -21,6 +21,10 @@ helpers do
   def authenticate_user!
     redirect "/login" unless current_user
   end
+  
+  def invalid_slugs
+    ["add", "edit", "new", "create", "delete", "login", "logout"]
+  end
 end
 
 require './models/project'
@@ -74,6 +78,10 @@ post "/add/?" do
     flash.now[:alert] = "Slug aleady in use, needs to be unique"
     @error_field = "slug"
     haml(:edit)
+  elsif invalid_slugs.include?(params[:slug])
+    flash.now[:alert] = "Invalid slug, pick another"
+    @error_field = "slug"
+    haml(:edit)
   else
     begin
       Date.parse(@project.date)
@@ -106,6 +114,10 @@ post "/:original_slug/edit/?" do
   
   if params[:slug] != params[:original_slug] and Project.find_by_slug(params[:slug])
     flash.now[:alert] = "Slug aleady in use, needs to be unique"
+    @error_field = "slug"
+    haml(:edit)
+  elsif invalid_slugs.include?(params[:slug])
+    flash.now[:alert] = "Invalid slug, pick another"
     @error_field = "slug"
     haml(:edit)
   else
