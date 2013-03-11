@@ -135,7 +135,20 @@ post "/:original_slug/edit/?" do
 end
 
 get "/:slug/delete/?" do
-  :authenticate_user!
+  authenticate_user!
+  
+  @project = Project.find_by_slug(params[:slug])
+  haml(:project_delete)
+end
+
+post "/:slug/delete" do
+  authenticate_user!
+  
+  if params[:submit] == "Yes"
+    project = Project.find_by_slug(params[:slug])
+    project.delete
+  end
+  redirect("/#{params[:slug]}")
 end
 
 get "/:slug/repo_:id/edit/?" do

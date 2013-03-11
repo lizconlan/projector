@@ -1,0 +1,14 @@
+%h2 Delete Project
+
+%h3.name= @project.name
+- if @project.readme
+  %div.project_readme= @markdown.render(@project.readme)
+  
+  %div.warning
+    Are you sure you want to delete this?
+  
+  %br
+  
+  %form{:method => "post"}
+    %input{:type => "submit", :value => "Yes", :name => "submit"}
+    %input{:type => "submit", :value => "No"}
