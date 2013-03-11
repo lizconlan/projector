@@ -8,6 +8,10 @@ gem 'redcarpet'
 gem 'bcrypt-ruby'
 gem 'sinatra-flash'
 
+group :production do
+  gem 'pg'
+end
+
 group :development do
   gem 'shotgun'
   gem 'mysql', '2.8.1'
