@@ -70,7 +70,7 @@ post "/add/?" do
   
   @project = Project.new
   @project.name = params[:name]
-  @project.slug = params[:slug]
+  @project.slug = params[:slug].downcase
   @project.date = params[:date]
   @project.readme = params[:readme]
   
@@ -78,7 +78,7 @@ post "/add/?" do
     flash.now[:alert] = "Slug aleady in use, needs to be unique"
     @error_field = "slug"
     haml(:edit)
-  elsif invalid_slugs.include?(params[:slug])
+  elsif invalid_slugs.include?(params[:slug]) or params[:slug].include?("/")
     flash.now[:alert] = "Invalid slug, pick another"
     @error_field = "slug"
     haml(:edit)
@@ -108,7 +108,7 @@ post "/:original_slug/edit/?" do
   
   @project = Project.find_by_slug(params[:original_slug])
   @project.name = params[:name]
-  @project.slug = params[:slug]
+  @project.slug = params[:slug].downcase
   @project.date = params[:date]
   @project.readme = params[:readme]
   
@@ -116,7 +116,7 @@ post "/:original_slug/edit/?" do
     flash.now[:alert] = "Slug aleady in use, needs to be unique"
     @error_field = "slug"
     haml(:edit)
-  elsif invalid_slugs.include?(params[:slug])
+  elsif invalid_slugs.include?(params[:slug]) or params[:slug].include?("/")
     flash.now[:alert] = "Invalid slug, pick another"
     @error_field = "slug"
     haml(:edit)
