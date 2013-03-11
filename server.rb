@@ -213,6 +213,27 @@ post "/:slug/repo_:id/delete" do
   redirect("/#{params[:slug]}/edit")
 end
 
+get "/:slug/site/add/?" do
+  authenticate_user!
+  
+  @site = LiveSite.new
+  haml(:site_edit)
+end
+
+post "/:slug/site/add" do
+  authenticate_user!
+  
+  project = Project.find_by_slug(params[:slug])
+  
+  @site = LiveSite.new
+  @site.url = params[:link]
+  @site.notes = params[:notes]
+  @site.project_id = project.id
+  
+  @site.save
+  redirect("/#{params[:slug]}/edit")
+end
+
 get "/:slug/site_:id/edit/?" do
   authenticate_user!
   
