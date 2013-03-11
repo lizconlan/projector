@@ -1,0 +1,15 @@
+%h2= request.path_info.split("/")[-1] == "add" ? "New Site" : "Edit"
+
+%form{:method => "post"}
+  %label{:for => "link"} Link
+  %input{:type => "text", :id => "link", :name => "link", :value => @site.url, :size => "60"}
+  
+  %br
+  
+  %label{:for => "notes"} Notes
+  %textarea{:id => "notes", :name => "notes", :cols => 40, :rows => 16}
+    =@site.notes
+  
+  %br
+  
+  %input{:type => "submit", :value => "Save"}

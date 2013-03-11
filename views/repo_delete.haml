@@ -1,0 +1,15 @@
+%h2 Delete Code Section
+
+%h3.name
+  %a{:href => @repo.url, :class => "repository"}= @repo.name
+- if @repo.notes
+  %div.repository_notes= @markdown.render(@repo.notes)
+  
+  %div.warning
+    Are you sure you want to delete this?
+  
+  %br
+  
+  %form{:method => "post"}
+    %input{:type => "submit", :value => "Yes", :name => "submit"}
+    %input{:type => "submit", :value => "No"}

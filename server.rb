@@ -138,6 +138,102 @@ get "/:slug/delete/?" do
   :authenticate_user!
 end
 
+get "/:slug/repo_:id/edit/?" do
+  authenticate_user!
+  
+  @repo = Repository.find(params[:id])
+  @repo.notes.gsub!("\n", "")
+  haml(:repo_edit)
+end
+
+post "/:slug/repo_:id/edit" do
+  authenticate_user!
+  
+  @repo = Repository.find(params[:id])
+  
+  @repo.name = params[:name]
+  @repo.url = params[:link]
+  @repo.notes = params[:notes]
+  
+  @repo.save
+  redirect("/#{params[:slug]}/edit")
+end
+
+get "/:slug/repo/add/?" do
+  authenticate_user!
+  
+  @repo = Repository.new
+  haml(:repo_edit)
+end
+
+post "/:slug/repo/add" do
+  authenticate_user!
+  
+  project = Project.find_by_slug(params[:slug])
+  
+  @repo = Repository.new
+  @repo.name = params[:name]
+  @repo.url = params[:link]
+  @repo.notes = params[:notes]
+  @repo.project_id = project.id
+  
+  @repo.save
+  redirect("/#{params[:slug]}/edit")
+end
+
+get "/:slug/repo_:id/delete/?" do
+  authenticate_user!
+  
+  @repo = Repository.find(params[:id])
+  haml(:repo_delete)
+end
+
+post "/:slug/repo_:id/delete" do
+  authenticate_user!
+  
+  if params[:submit] == "Yes"
+    repo = Repository.find(params[:id])
+    repo.delete
+  end
+  redirect("/#{params[:slug]}/edit")
+end
+
+get "/:slug/site_:id/edit/?" do
+  authenticate_user!
+  
+  @site = LiveSite.find(params[:id])
+  @site.notes.gsub!("\n", "")
+  haml(:site_edit)
+end
+
+post "/:slug/site_:id/edit" do
+  authenticate_user!
+  
+  @site = LiveSite.find(params[:id])
+  @site.url = params[:link]
+  @site.notes = params[:notes]
+  
+  @site.save
+  redirect("/#{params[:slug]}/edit")
+end
+
+get "/:slug/site_:id/delete/?" do
+  authenticate_user!
+  
+  @site = LiveSite.find(params[:id])
+  haml(:site_delete)
+end
+
+post "/:slug/site_:id/delete" do
+  authenticate_user!
+  
+  if params[:submit] == "Yes"
+    site = LiveSite.find(params[:id])
+    site.delete
+  end
+  redirect("/#{params[:slug]}/edit")
+end
+
 get "/:slug/?" do
   @project = Project.find_by_slug(params[:slug])
   haml(:show)

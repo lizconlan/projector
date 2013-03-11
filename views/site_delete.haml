@@ -1,0 +1,14 @@
+%h2 Delete Live Link
+
+%a{:href => @site.url}= @site.url
+- if @site.notes
+  %div.site_notes= @markdown.render(@site.notes)
+  
+  %div.warning
+    Are you sure you want to delete this?
+  
+  %br
+  
+  %form{:method => "post"}
+    %input{:type => "submit", :value => "Yes", :name => "submit"}
+    %input{:type => "submit", :value => "No"}

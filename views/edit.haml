@@ -32,8 +32,8 @@
       %br
       ="<b>notes:</b> #{site.notes}"
       .button_bar
-        %a{:href => "/#{@project.slug}/site#{site.id}/edit"} edit
-        %a{:href => "/#{@project.slug}/site#{site.id}/delete"} delete
+        %a{:href => "/#{@project.slug}/site_#{site.id}/edit"} edit
+        %a{:href => "/#{@project.slug}/site_#{site.id}/delete"} delete
         
   .button_bar
     %a{:href => "/#{@project.slug}/site/add"} Add new live link
