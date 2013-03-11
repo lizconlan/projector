@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(:version => 201303100053) do
     t.string "name",   :limit => 256, :null => false
     t.text   "readme"
     t.date   "date"
-    t.text   "slug",   :limit => 255
+    t.string "slug",   :limit => 128
   end
 
   create_table "repositories", :force => true do |t|

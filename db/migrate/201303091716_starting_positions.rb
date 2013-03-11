@@ -4,7 +4,7 @@ class StartingPositions < ActiveRecord::Migration
       t.string  :name, :limit => 256, :null => false
       t.text    :readme
       t.date    :date
-      t.string    :slug, :limit => 128
+      t.string  :slug, :limit => 128
     end
     
     create_table :repositories do |t|
