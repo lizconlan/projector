@@ -4,6 +4,11 @@
   %span.project_date
     ="c. #{@project.date.strftime("%B %Y")}"
   
+  -if current_user
+    %div.button_bar
+      %a{:href => "/#{@project.slug}/edit"} Edit
+      %a{:href => "/#{@project.slug}/delete"} Delete
+  
   %h3 Overview
   %div.description
     =@markdown.render(@project.readme)
