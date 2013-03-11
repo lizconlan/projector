@@ -6,7 +6,8 @@ require 'logger'
 require './models/user'
 
 task :environment do
-  dbconfig = YAML::load(File.open 'config/database.yml')
+  env = ENV["RACK_ENV"] ? ENV["RACK_ENV"] : "development"
+  dbconfig = YAML::load(File.open 'config/database.yml')[env]
   ActiveRecord::Base.establish_connection(dbconfig)
 end
 
