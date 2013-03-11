@@ -24,9 +24,36 @@
   
   %br
   
-  %label{:for =>  "ll"} Live Links
+  %h3 Live links
+  
+  - @project.live_sites.each do |site|
+    %div.sub_item
+      %label{:for => "sitelink_#{site.id}"} Link
+      %input{:type => "text", :id => "sitelink_#{site.id}", :name => "sitelink_#{site.id}", :value => site.url, :size => 56}
+      %br
+      %label{:for => "sitenotes_#{site.id}"} Notes
+      %textarea{:cols => 40, :rows => 8, :name => "sitenotes_#{site.id}", :id => "sitenotes_#{site.id}"}
+        =site.notes
+  
+  %br
+  
+  %h3 Code
+  
+  - @project.repositories.each do |repo|
+    %div.sub_item
+      %h4= repo.name
+      
+      %label{:for => "reponame_#{repo.id}"} Name
+      %input{:type => "text", :value => repo.name, :size => 56, :name => "reponame_#{repo.id}", :id => "reponame_#{repo.id}"}
+      %br
+      %label{:for => "repolink_#{repo.id}"} Link
+      %input{:type => "text", :value => repo.url, :size => 56, :name => "repolink_#{repo.id}", :id => "repolink_#{repo.id}"}
+      %br
+      %label{:for => "reponotes_#{repo.id}"} Notes
+      %textarea{:cols => 40, :rows => 8, :name => "reponotes_#{repo.id}", :id => "reponotes_#{repo.id}"}
+        =repo.notes
+  
+  %br
   
   %input{:type => "submit", :value => "Save"}
-  
-
   
