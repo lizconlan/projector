@@ -11,7 +11,20 @@ before do
   env = ENV["RACK_ENV"] ? ENV["RACK_ENV"] : "development"
   dbconfig = YAML::load(File.open 'config/database.yml')[env]
   @title = if ENV['title'] ? ENV['title'] ? YAML::load(File.open 'config/site.yml')[:title]
-  ActiveRecord::Base.establish_connection(dbconfig)
+  if env == "production"
+    db = URI.parse(ENV['DATABASE_URL'])
+    ActiveRecord::Base.establish_connection(
+      :adapter  => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
+      :host     => db.host,
+      :port     => db.port,
+      :username => db.user,
+      :password => db.password,
+      :database => db.path[1..-1],
+      :encoding => 'utf8'
+    )
+  else
+    ActiveRecord::Base.establish_connection(dbconfig)
+  end
   @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true, :space_after_headers => true)
 end
 
