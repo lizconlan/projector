@@ -2,7 +2,12 @@
 
 =styled_flash
 
-%ul
+%dl
   - @projects.each do |project|
-    %li.project
+    %dt.project
       %a{:href => "/#{project.slug}"}= project.name
+      %dd
+        - if(project.readme.split("\n")[0])
+          =project.readme.split("\n")[0].strip.gsub(/\.$/, "")
+          - if project.readme.split("\n")[0].length < project.readme.length
+            = "..."
