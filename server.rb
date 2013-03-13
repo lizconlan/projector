@@ -94,7 +94,7 @@ post "/add/?" do
     haml(:edit)
   else
     begin
-      Date.parse(@project.date)
+      Date.parse(params[:date])
     rescue
       flash.now[:alert] = "Invalid date, please correct it before continuing"
       @error_field = "date"
