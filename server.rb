@@ -2,6 +2,7 @@ require 'sinatra'
 require 'sinatra/flash'
 require 'active_record'
 require 'haml'
+require 'sass'
 require 'date'
 require 'redcarpet'
 
@@ -33,6 +34,11 @@ require './models/project'
 require './models/repository'
 require './models/live_site'
 require './models/user'
+
+get "/styles.css" do
+  content_type 'text/css', :charset => 'utf-8'
+  sass(:styles, :style => :compressed)
+end
 
 get "/" do
   @projects = Project.find(:all, :order => "date desc") #ok, should paginate here but this will do for now
