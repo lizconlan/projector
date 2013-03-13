@@ -41,7 +41,9 @@ get "/styles.css" do
 end
 
 get "/" do
-  @projects = Project.find(:all, :order => "date desc") #ok, should paginate here but this will do for now
+  # could be paginated or - *boo, hiss* inifini-scroll - but I quite like having it all in once place
+  # (hey, if it's good enough for GitHub...)
+  @projects = Project.find(:all, :order => "date desc")
   haml(:index)
 end
 
