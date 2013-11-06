@@ -23,23 +23,33 @@ header
   border-bottom: 1px solid #AAA
   padding-top: 0.8em
   
-  ul
+  div#header 
     max-width: 650px
-    list-style: none
     margin: 0 auto
-    
-    h1
-      display: inline
-      margin: 0.4em 2em 0 -1em
-      font-weight: normal
-      font-family: Georgia,serif
-      font-size: 1.3em
-      color: #AAA
+    position: relative
+  
+  h1
+    display: inline
+    font-weight: normal
+    font-family: Georgia,serif
+    font-size: 1.3em
+    color: #AAA
+  
+  nav
+    display: block
+    position: absolute
+    top: 0
+    right: 0
+  
+  ul
+    list-style: none
+    text-align: right
+    margin: 0
     
     li
       display: inline
       color: #666
-      padding-right: 4em
+      padding-right: 3em
     
   a
     text-decoration: none
@@ -49,11 +59,11 @@ header
     color: #0F0E09
   
   a:hover
-    text-decoration:underline
-    color:crimson
+    text-decoration: underline
+    color: crimson
 
 #main
-  margin: 1em auto
+  margin: 2.5em auto
   text-rendering: optimizeLegibility
   max-width: 650px
 
