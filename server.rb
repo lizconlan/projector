@@ -5,6 +5,7 @@ require 'haml'
 require 'sass'
 require 'date'
 require 'redcarpet'
+require 'redis'
 
 enable :sessions
 
@@ -14,6 +15,12 @@ before do
   #@title = if ENV['title'] ? ENV['title'] : YAML::load(File.open 'config/site.yml')[:title]
   ActiveRecord::Base.establish_connection(dbconfig)
   @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true, :space_after_headers => true)
+  if ENV["REDISCLOUD_URL"]
+    redis_uri = URI.parse(ENV["REDISCLOUD_URL"])
+  else
+    redis_uri = URI.parse(YAML::load(File.open 'config/redis.yml')[:url])
+  end
+  @redis = Redis.new(:host => redis_uri.host, :port => redis_uri.port, :password => redis_uri.password)
 end
 
 helpers do
@@ -41,10 +48,13 @@ get "/styles.css" do
 end
 
 get "/" do
-  # could be paginated or - *boo, hiss* inifini-scroll - but I quite like having it all in once place
-  # (hey, if it's good enough for GitHub...)
-  @projects = Project.find(:all, :order => "date desc")
-  haml(:index)
+  cache = @redis.get("home")
+  unless cache
+    @projects = Project.find(:all, :order => "date desc")
+    cache = haml(:index)
+    @redis.set("home", cache)
+  end
+  cache
 end
 
 get "/login/?" do
@@ -100,6 +110,7 @@ post "/add/?" do
       @error_field = "date"
       haml(:edit)
     else
+      @redis.del("home")
       @project.save
       redirect("/#{@project.slug}")
     end
@@ -138,6 +149,7 @@ post "/:original_slug/edit/?" do
       @error_field = "date"
       haml(:edit)
     else
+      @redis.del("home")
       @project.save
       redirect("/#{@project.slug}")
     end
@@ -178,6 +190,7 @@ post "/:slug/repo_:id/edit" do
   @repo.url = params[:link]
   @repo.notes = params[:notes]
   
+  @redis.del("home")
   @repo.save
   redirect("/#{params[:slug]}/edit")
 end
@@ -200,6 +213,7 @@ post "/:slug/repo/add" do
   @repo.notes = params[:notes]
   @repo.project_id = project.id
   
+  @redis.del("home")
   @repo.save
   redirect("/#{params[:slug]}/edit")
 end
@@ -238,6 +252,7 @@ post "/:slug/site/add" do
   @site.notes = params[:notes]
   @site.project_id = project.id
   
+  @redis.del("home")
   @site.save
   redirect("/#{params[:slug]}/edit")
 end
@@ -257,6 +272,7 @@ post "/:slug/site_:id/edit" do
   @site.url = params[:link]
   @site.notes = params[:notes]
   
+  @redis.del("home")
   @site.save
   redirect("/#{params[:slug]}/edit")
 end

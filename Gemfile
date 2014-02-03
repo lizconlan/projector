@@ -8,6 +8,7 @@ gem 'sass', '3.2.7'
 gem 'redcarpet'
 gem 'bcrypt-ruby'
 gem 'sinatra-flash'
+gem 'redis' #caching layer
 
 group :production do
   gem 'pg'
